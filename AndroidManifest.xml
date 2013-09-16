@@ -25,6 +25,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="org.sunnyone.lightcontroller.PrefActivity"
+            android:label="@string/title_activity_pref" >
+        </activity>
     </application>
 
 </manifest>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="Server">
+        <EditTextPreference
+            android:hint="http://192.168.1.1/lightremo/lightremo.cgi"
+            android:key="lightremo_url"
+            android:title="URL"
+            android:summary="URL to lightremo.cgi"
+            android:dialogTitle="URL" />
+    </PreferenceCategory>
+</PreferenceScreen>
