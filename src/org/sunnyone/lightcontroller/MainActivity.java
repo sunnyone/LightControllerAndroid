@@ -7,7 +7,38 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import android.os.AsyncTask;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import java.io.*;
+
 public class MainActivity extends Activity {
+
+	class AccessCgiTask extends AsyncTask<String, Void, String> {
+		private static final String SERVER_URL = "http://192.168.1.1/lightremo/lightremo.cgi?sw=";
+
+		@Override
+		protected String doInBackground(String... swParams) {
+			HttpURLConnection urlConn = null;
+			try {
+				URL url = new URL(SERVER_URL + swParams[0]);
+				urlConn = (HttpURLConnection)url.openConnection();
+				urlConn.connect();
+				return urlConn.getResponseMessage();
+			} catch (Exception ex) {
+				return "Failed to request: " + ex.toString();
+			} finally {
+				if (urlConn != null)
+					urlConn.disconnect();
+			}
+		}
+
+		@Override
+        protected void onPostExecute(String response) {
+			Toast.makeText(MainActivity.this, response, Toast.LENGTH_LONG).show();
+		}
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -18,7 +49,7 @@ public class MainActivity extends Activity {
 		buttonOn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(MainActivity.this, "Light is on", Toast.LENGTH_LONG).show();
+				new AccessCgiTask().execute("on");
 			}
 		});
 
@@ -26,7 +57,7 @@ public class MainActivity extends Activity {
 		buttonOff.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(MainActivity.this, "Light is off", Toast.LENGTH_LONG).show();
+				new AccessCgiTask().execute("off");
 			}
 		});
 
