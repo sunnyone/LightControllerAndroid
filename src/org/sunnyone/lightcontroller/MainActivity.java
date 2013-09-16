@@ -2,12 +2,18 @@ package org.sunnyone.lightcontroller;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
+
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -16,18 +22,17 @@ import java.io.*;
 public class MainActivity extends Activity {
 
 	class AccessCgiTask extends AsyncTask<String, Void, String> {
-		private static final String SERVER_URL = "http://192.168.1.1/lightremo/lightremo.cgi?sw=";
-
 		@Override
-		protected String doInBackground(String... swParams) {
+		protected String doInBackground(String... urlStrings) {
 			HttpURLConnection urlConn = null;
+			String urlString = urlStrings[0];
 			try {
-				URL url = new URL(SERVER_URL + swParams[0]);
+				URL url = new URL(urlString);
 				urlConn = (HttpURLConnection)url.openConnection();
 				urlConn.connect();
 				return urlConn.getResponseMessage();
 			} catch (Exception ex) {
-				return "Failed to request: " + ex.toString();
+				return "Failed to access " + urlString + ": " + ex.toString();
 			} finally {
 				if (urlConn != null)
 					urlConn.disconnect();
@@ -40,6 +45,12 @@ public class MainActivity extends Activity {
 		}
 	}
 
+	private String getLightRemoUrl(Context context, String swParam) {
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+		String lightRemoUrl = pref.getString("lightremo_url", "");
+		return lightRemoUrl + "?sw=" + swParam;
+	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -49,7 +60,8 @@ public class MainActivity extends Activity {
 		buttonOn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				new AccessCgiTask().execute("on");
+				String lightRemoUrl = getLightRemoUrl(MainActivity.this, "on");
+				new AccessCgiTask().execute(lightRemoUrl);
 			}
 		});
 
@@ -57,7 +69,8 @@ public class MainActivity extends Activity {
 		buttonOff.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				new AccessCgiTask().execute("off");
+				String lightRemoUrl = getLightRemoUrl(MainActivity.this, "off");
+				new AccessCgiTask().execute(lightRemoUrl);
 			}
 		});
 
