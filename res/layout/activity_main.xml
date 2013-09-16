@@ -11,21 +11,21 @@
     tools:context=".MainActivity" >
 
     <Button
-        android:id="@+id/buttonOn"
+        android:id="@+id/button_on"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="On" />
 
     <Button
-        android:id="@+id/buttonOff"
+        android:id="@+id/button_off"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="Off" />
 
     <Button
-        android:id="@+id/buttonClose"
+        android:id="@+id/button_close"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
