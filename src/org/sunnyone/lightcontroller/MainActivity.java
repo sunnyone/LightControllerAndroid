@@ -78,4 +78,19 @@ public class MainActivity extends Activity {
 		return true;
 	}
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case R.id.action_settings:
+        	Intent intent = new Intent(this, PrefActivity.class);
+        	startActivityForResult(intent, 0);
+
+            break;
+        default:
+            return super.onOptionsItemSelected(item);
+        }
+        return false;
+    }
+
+
 }
